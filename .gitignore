@@ -1,0 +1,6 @@
+build.dev
+build
+minivmac.pdx
+Source/pdex.dylib
+Source/pdex.elf
+*.dsk

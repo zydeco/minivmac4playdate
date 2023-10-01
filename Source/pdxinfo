@@ -1,0 +1,6 @@
+name=Mini vMac
+author=Jesus A. Alvarez
+description=Miniature Macintosh Emulator
+bundleID=net.namedfork.minivmac
+imagePath=images
+buildNumber=1

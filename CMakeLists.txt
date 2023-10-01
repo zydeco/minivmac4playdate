@@ -1,0 +1,40 @@
+cmake_minimum_required(VERSION 3.14)
+set(CMAKE_C_STANDARD 11)
+
+set(ENVSDK $ENV{PLAYDATE_SDK_PATH})
+
+if (NOT ${ENVSDK} STREQUAL "")
+	# Convert path from Windows
+	file(TO_CMAKE_PATH ${ENVSDK} SDK)
+else()
+	execute_process(
+			COMMAND bash -c "egrep '^\\s*SDKRoot' $HOME/.Playdate/config"
+			COMMAND head -n 1
+			COMMAND cut -c9-
+			OUTPUT_VARIABLE SDK
+			OUTPUT_STRIP_TRAILING_WHITESPACE
+	)
+endif()
+
+if (NOT EXISTS ${SDK})
+	message(FATAL_ERROR "SDK Path not found; set ENV value PLAYDATE_SDK_PATH")
+	return()
+endif()
+
+set(CMAKE_CONFIGURATION_TYPES "Debug;Release")
+set(CMAKE_XCODE_GENERATE_SCHEME TRUE)
+
+# Game Name Customization
+set(PLAYDATE_GAME_NAME minivmac)
+set(PLAYDATE_GAME_DEVICE minivmac_DEVICE)
+
+project(${PLAYDATE_GAME_NAME} C ASM)
+
+if (TOOLCHAIN STREQUAL "armgcc")
+	add_executable(${PLAYDATE_GAME_DEVICE} src/OSGLUPDX.c src/SCSIEMDV.c src/MINEM68K.c src/GLOBGLUE.c src/M68KITAB.c src/PROGMAIN.c src/IWMEMDEV.c src/VIAEMDEV.c src/SCRNEMDV.c src/SONYEMDV.c src/SNDEMDEV.c src/ROMEMDEV.c src/RTCEMDEV.c src/KBRDEMDV.c src/SCCEMDEV.c src/MOUSEMDV.c)
+else()
+	add_library(${PLAYDATE_GAME_NAME} SHARED src/OSGLUPDX.c src/SCSIEMDV.c src/MINEM68K.c src/GLOBGLUE.c src/M68KITAB.c src/PROGMAIN.c src/IWMEMDEV.c src/VIAEMDEV.c src/SCRNEMDV.c src/SONYEMDV.c src/SNDEMDEV.c src/ROMEMDEV.c src/RTCEMDEV.c src/KBRDEMDV.c src/SCCEMDEV.c src/MOUSEMDV.c)
+endif()
+
+include(${SDK}/C_API/buildsupport/playdate_game.cmake)
+
