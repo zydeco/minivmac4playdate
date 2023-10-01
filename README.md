@@ -24,7 +24,7 @@ Port of Mini vMac to the Panic Playdate console. It's not very usable due to slo
 
 ![Card in the Playdate home screen](Screenshots/home-card.png)
 
-* Build or download `minivmac.pdx`
+* Build or download `minivmac.pdx` from [releases](https://github.com/zydeco/minivmac4playdate/releases).
 * Copy `minivmac.pdx` to the Playdate's `Games` directory, or sideload it [from the web](https://play.date/account/sideload/).
 * Copy `vMac.rom` and any disk images to the Playdate's `Data/net.namedfork.minivmac` directory (create it if it doesn't exist).
 
