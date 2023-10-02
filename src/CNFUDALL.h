@@ -13,6 +13,7 @@
 #define kLn2SoundSampSz 3
 
 #define dbglog_HAVE 1
+#define dbglog_Lag 1
 
 #define WantAbnormalReports 0
 

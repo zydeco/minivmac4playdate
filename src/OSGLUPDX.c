@@ -29,8 +29,8 @@ PlaydateAPI *pd = NULL;
 #pragma mark - Initialization
 
 // emulating in update callbacks is slow
-#define TargetFPS 5
-#define TargetSpeed 0.5
+#define TargetFPS 15
+#define TargetSpeed 1.0
 #define TicksPerFrame ((60 / TargetFPS) * TargetSpeed)
 
 #define kRAM_Size (kRAMa_Size + kRAMb_Size)
@@ -226,11 +226,12 @@ LOCALPROC Screen_UnInit(void) {
 
 #pragma mark - Time and Space
 
+#define MyTickDuration (1.0f / 60.14742f)
+LOCALVAR ui5b NewMacDateInSeconds;
+
+#if 0
 LOCALVAR ui5b TrueEmulatedTime = 0;
 LOCALVAR float NextTickChangeTime;
-#define MyTickDuration (1.0f / 60.14742f)
-
-LOCALVAR ui5b NewMacDateInSeconds;
 
 LOCALPROC UpdateTrueEmulatedTime(void) {
     float TimeDiff = pd->system->getElapsedTime() - NextTickChangeTime;
@@ -252,14 +253,17 @@ LOCALPROC UpdateTrueEmulatedTime(void) {
     }
 }
 
-GLOBALFUNC blnr ExtraTimeNotOver(void) {
-    UpdateTrueEmulatedTime();
-    return falseblnr;
-}
-
 LOCALPROC StartUpTimeAdjust(void) {
     pd->system->resetElapsedTime();
     NextTickChangeTime = MyTickDuration;
+}
+
+#endif
+
+GLOBALFUNC blnr ExtraTimeNotOver(void) {
+    // not used
+    //UpdateTrueEmulatedTime();
+    return falseblnr;
 }
 
 LOCALVAR ui5b MyDateDelta;
@@ -279,6 +283,7 @@ FORWARDPROC MySound_SecondNotify(void);
 #endif
 
 GLOBALPROC WaitForNextTick(void) {
+#if 0
     if (CheckDateTime()) {
 #if MySoundEnabled
         MySound_SecondNotify();
@@ -288,6 +293,7 @@ GLOBALPROC WaitForNextTick(void) {
 #endif
     }
     OnTrueTime = TrueEmulatedTime;
+#endif
 }
 
 LOCALFUNC blnr InitLocationDat(void) {
@@ -838,6 +844,13 @@ LOCALFUNC int DoUpdate(void* userdata) {
      RunEmulatedTicksToTrueTime();
      DoEmulateExtraTime();*/
 
+#if dbglog_HAVE && dbglog_Lag
+    static int lagCount = 0;
+    if (lagCount++ % 30 == 0) {
+        pd->system->resetElapsedTime();
+    }
+#endif
+
     if (!SpeedStopped) {
         CheckDateTime();
         EmVideoDisable = trueblnr;
@@ -852,5 +865,12 @@ LOCALFUNC int DoUpdate(void* userdata) {
     // update screen
     MyUpdateScreen();
 
+#if dbglog_HAVE && dbglog_Lag
+    float emTime = pd->system->getElapsedTime();
+    float timePerTick = emTime / (float)(TicksPerFrame);
+    if (lagCount % 30 == 0) {
+        pd->system->logToConsole("avg time per tick %dus (expected %dus)", (int)(timePerTick * 1000000), (int)(MyTickDuration * 1000000));
+    }
+#endif
     return 1;
 }

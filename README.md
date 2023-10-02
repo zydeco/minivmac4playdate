@@ -6,10 +6,10 @@ Port of Mini vMac to the Panic Playdate console. It's not very usable due to slo
 
 ## Features
 
-* Emulates a Macintosh Plus at half its speed, or slower.
+* Emulates a Macintosh Plus, but is around 3.5 times slower.
 * Screen matching the Playdate (400×240). This is smaller than any Macintosh, which will break some software.
 * Draws screen at around 4 fps.
-* No sound.
+* No sound (disabled for performance).
 * Controls:
 	* D-pad: mouse movement or WASD (set in menu)
 	* A button: mouse button
