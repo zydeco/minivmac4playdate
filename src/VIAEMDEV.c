@@ -725,7 +725,7 @@ GLOBALPROC VIA1_DoTimer1Check(void)
 				ui5b NewTimer;
 #ifdef _VIA_Debug
 				fprintf(stderr, "posting Timer1Check, %d, %d\n",
-					Temp, GetCuriCount());
+					NewTemp, GetCuriCount());
 #endif
 				if (NewTemp == 0) {
 					NewTimer = (0x00010000UL * CyclesScaledPerViaTime);

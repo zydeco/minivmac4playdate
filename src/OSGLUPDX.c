@@ -489,11 +489,11 @@ LOCALFUNC blnr InsertDiskNamed(const char *name) {
         // try data folder
         fp = pd->file->open(name, kFileReadData);
         // open as writable
-        if (fp != NULL) {
+        /*if (fp != NULL) {
             pd->file->close(fp);
             fp = pd->file->open(name, kFileRead|kFileReadData|kFileWrite);
             locked = falseblnr;
-        }
+        }*/
     }
     if (fp == NULL) {
         // give up

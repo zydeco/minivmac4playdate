@@ -12,8 +12,11 @@
 #define MySoundRecenterSilence 0
 #define kLn2SoundSampSz 3
 
-#define dbglog_HAVE 1
+#define dbglog_HAVE 0
 #define dbglog_Lag 1
+
+//#define _VIA_Debug 1
+//#include <stdio.h>
 
 #define WantAbnormalReports 0
 
