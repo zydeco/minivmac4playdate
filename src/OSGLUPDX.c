@@ -846,7 +846,7 @@ LOCALFUNC int DoUpdate(void* userdata) {
 
 #if dbglog_HAVE && dbglog_Lag
     static int lagCount = 0;
-    if (lagCount++ % 30 == 0) {
+    if (++lagCount % 30 == 0) {
         pd->system->resetElapsedTime();
     }
 #endif
