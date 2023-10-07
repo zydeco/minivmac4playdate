@@ -549,11 +549,36 @@ LOCALPROCUSEDONCE DisasmPEA(void)
 	dbglog_writeReturn();
 }
 
+#include "MacTraps.h"
+
+int CmpTrap(const void *pKey, const void *pDesc) {
+    const struct TrapDesc *key = (const struct TrapDesc*)pKey;
+    const struct TrapDesc *desc = (const struct TrapDesc*)pDesc;
+    return key->num - desc->num;
+}
+
+#include <stdlib.h>
+
+GLOBALFUNC const char* TrapName(int num) {
+    const struct TrapDesc key = {num, ""};
+    const struct TrapDesc *trap = bsearch(&key, TRAPS, sizeof(TRAPS)/sizeof(TRAPS[0]), sizeof(TRAPS[0]), CmpTrap);
+    if (trap == NULL) {
+        return NULL;
+    }
+    return trap->name;
+}
+
 LOCALPROCUSEDONCE DisasmALine(void)
 {
-	DisasmStartOne("$");
-	dbglog_writeHex(Disasm_opcode);
-	dbglog_writeReturn();
+    DisasmStartOne("TRAP ");
+    const char *trapName = TrapName(Disasm_opcode);
+    if (trapName != NULL) {
+        dbglog_writeCStr(trapName);
+    } else {
+        dbglog_writeCStr("$");
+        dbglog_writeHex(Disasm_opcode);
+    }
+    dbglog_writeReturn();
 }
 
 LOCALPROCUSEDONCE DisasmBsr(void)
